@@ -1,12 +1,16 @@
-# Use official Maven image with Java 17 JDK and Maven 3.6.3
-FROM maven:3.9-eclipse-temurin-11
+# Use official Python base image
+FROM python:3.9-slim
+
 # Set working directory
 WORKDIR /app
-# Copy pom.xml
-COPY pom.xml .
-# Copy source code
-COPY src ./src
-# Build the project
-RUN mvn clean package
+
+# Copy application files
+COPY requirements.txt .
+COPY app.py .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
 # Run the application
-CMD ["java", "-jar", "target/*.jar"]
+CMD ["python", "app.py"]
+

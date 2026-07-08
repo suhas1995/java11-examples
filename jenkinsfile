@@ -1,20 +1,29 @@
 pipeline {
     agent any
+
     stages {
-        stage ('checkout') {
+        stage('Clone') {
             steps {
-            git 'https://github.com/amitopenwriteup/java11-examples.git'
+                // Clone the repository from GitHub
+                git branch: 'main', url: 'https://github.com/suhas1995/codewithsuhas.git'
             }
         }
-        stage ('packaging') {
+
+        stage('Build') {
             steps {
-                sh 'mvn clean package'
+                script {
+                    sh 'docker build -t localhost:5000/python-demo:v1 .'
+                }
             }
         }
-        stage ('archving') {
+
+        stage('Push') {
             steps {
-                 archiveArtifacts 'target/*.jar'
+                script {
+                    sh 'docker push localhost:5000/python-demo:v1'
+                }
             }
         }
     }
 }
+
